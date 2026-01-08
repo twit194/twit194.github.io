@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>杨洁的个人主页</title>
+    <style>
+      /* 全局样式重置 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Microsoft YaHei", "SimHei", sans-serif;
+      }
+
+      body {
+        background-color: #f8d9e9;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      /* 头部导航样式 */
+      header {
+        background-color: #c89fc7;
+        padding: 15px 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+      }
+
+      /* Logo样式 */
+      .logo {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo img {
+        height: 40px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      /* 汉堡按钮样式 */
+      .hamburger {
+        display: none;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1000;
+      }
+
+      .hamburger span {
+        display: block;
+        width: 25px;
+        height: 3px;
+        margin: 5px auto;
+        background-color: #fff;
+        transition: all 0.3s ease-in-out;
+      }
+
+      /* 汉堡按钮激活状态 */
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex: 1;
+        margin: 0;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      nav a:hover {
+        color: #ffd166;
+      }
+
+      /* 横幅图片样式 */
+      .banner {
+        width: 100%;
+        height: 70vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .banner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.5s ease;
+      }
+
+      .banner img:hover {
+        transform: scale(1.05);
+      }
+
+      /* 主体内容样式 */
+      main {
+        max-width: 1200px;
+        margin: 20px auto;
+        display: flex;
+        gap: 30px;
+        padding: 0 20px;
+        flex-wrap: wrap;
+      }
+
+      /* 侧边个人信息 */
+      .sidebar {
+        flex: 1;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        text-align: left;
+        min-width: 250px;
+      }
+
+      .avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        margin-right: auto;
+        border: 3px solid #c89fc7;
+        display: block;
+        object-fit: cover;
+      }
+
+      .avatar-container {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 15px;
+      }
+
+      .stats-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background-color: #f8d9e9;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .stat-item:hover {
+        background-color: #e8c9d9;
+        transform: translateX(5px);
+      }
+
+      .stat-icon {
+        font-size: 20px;
+      }
+
+      .stat-value {
+        font-size: 18px;
+        font-weight: bold;
+        color: #c89fc7;
+        min-width: 30px;
+        text-align: center;
+      }
+
+      .stat-label {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .sidebar h3 {
+        color: #c89fc7;
+        margin: 10px 0;
+      }
+
+      .sidebar p {
+        margin: 5px 0;
+        font-size: 16px;
+      }
+
+      /* 主内容区域 */
+      .content {
+        flex: 3;
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        min-width: 250px;
+      }
+
+      .content h2 {
+        color: #c89fc7;
+        border-bottom: 2px solid #f8d9e9;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+
+      .intro-text {
+        font-size: 16px;
+        color: #555;
+        line-height: 1.8;
+      }
+
+      /* 响应式适配 */
+      @media (max-width: 768px) {
+        main {
+          flex-direction: column;
+        }
+
+        .logo img {
+          height: 35px;
+        }
+
+        .avatar-container {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .stats-container {
+          flex-direction: row;
+          justify-content: center;
+        }
+
+        /* 显示汉堡按钮 */
+        .hamburger {
+          display: block;
+        }
+
+        /* 隐藏默认导航菜单 */
+        nav ul {
+          position: fixed;
+          left: -100%;
+          top: 70px;
+          flex-direction: column;
+          background-color: #c89fc7;
+          width: 100%;
+          text-align: center;
+          transition: 0.3s;
+          box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+          gap: 0;
+          padding: 20px 0;
+        }
+
+        /* 显示导航菜单 */
+        nav ul.active {
+          left: 0;
+        }
+
+        nav li {
+          margin: 15px 0;
+        }
+
+        nav a {
+          font-size: 20px;
+        }
+
+        .banner {
+          height: 200px;
+        }
+      }
+
+      /* 内容卡片样式 */
+      .content-card {
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+      }
+      
+      .content-card h3 {
+        color: #c89fc7;
+        margin-bottom: 15px;
+      }
+      
+      .content-card p {
+        margin-bottom: 10px;
+        line-height: 1.8;
+      }
+      
+      /* 内容区域样式 */
+      .content-section {
+        margin-bottom: 40px;
+      }
+      
+      .content-section h2 {
+        color: #c89fc7;
+        border-bottom: 2px solid #f8d9e9;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+
+      /* 评论区样式 */
+      .comment-section {
+        margin-top: 30px;
+        border-top: 2px solid #f8d9e9;
+        padding-top: 20px;
+      }
+
+      .comment-section h3 {
+        color: #c89fc7;
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
+
+      .comment-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .comment-form input,
+      .comment-form textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        font-family: inherit;
+        resize: vertical;
+      }
+
+      .comment-form input:focus,
+      .comment-form textarea:focus {
+        outline: none;
+        border-color: #c89fc7;
+      }
+
+      .comment-form textarea {
+        min-height: 80px;
+      }
+
+      .comment-form button {
+        background-color: #c89fc7;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+      }
+
+      .comment-form button:hover {
+        background-color: #b38db2;
+      }
+
+      .comment-list {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .comment-item {
+        background-color: #f8f8f8;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      }
+
+      .comment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .comment-name {
+        font-weight: bold;
+        color: #c89fc7;
+        font-size: 14px;
+      }
+
+      .comment-time {
+        font-size: 12px;
+        color: #999;
+      }
+
+      .comment-body {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      .comment-list::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .comment-list::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+      }
+
+      .comment-list::-webkit-scrollbar-thumb {
+        background: #c89fc7;
+        border-radius: 3px;
+      }
+
+      .comment-list::-webkit-scrollbar-thumb:hover {
+        background: #b38db2;
+      }
+
+      /* 回到顶部按钮样式 */
+      #back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background-color: #c89fc7;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 999;
+      }
+
+      #back-to-top:hover {
+        background-color: #b38db2;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      #back-to-top.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      #back-to-top:active {
+        transform: translateY(0);
+      }
+    </style>
+    <script>
+      // 页面加载完成后执行
+      document.addEventListener("DOMContentLoaded", function () {
+        // 获取汉堡按钮
+        const hamburger = document.querySelector(".hamburger");
+        // 获取导航菜单
+        const navUl = document.querySelector("nav ul");
+        
+        // 汉堡按钮点击事件
+        hamburger.addEventListener("click", function () {
+          // 切换汉堡按钮和导航菜单的active类
+          hamburger.classList.toggle("active");
+          navUl.classList.toggle("active");
+        });
+        
+        // 为导航链接添加点击事件，实现平滑滚动
+        const navLinks = document.querySelectorAll("nav a");
+        navLinks.forEach((link) => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            
+            // 获取目标内容区域的ID
+            const targetId = this.textContent.trim();
+            // 获取目标元素
+            const targetElement = document.getElementById(targetId);
+            
+            // 平滑滚动到目标位置
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: "smooth" });
+            }
+            
+            // 点击导航链接后关闭汉堡菜单
+            hamburger.classList.remove("active");
+            navUl.classList.remove("active");
+          });
+        });
+
+        // 加载本地存储的评论
+        loadComments();
+
+        // 初始化点赞数和访问人数
+        initStats();
+
+        // 监听滚动事件，控制回到顶部按钮的显示
+        window.addEventListener("scroll", function () {
+          const backToTopBtn = document.getElementById("back-to-top");
+          if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add("show");
+          } else {
+            backToTopBtn.classList.remove("show");
+          }
+        });
+      });
+
+      // 添加评论功能
+      function addComment() {
+        const nameInput = document.getElementById("comment-name");
+        const contentInput = document.getElementById("comment-content");
+        const commentList = document.getElementById("comment-list");
+
+        const name = nameInput.value.trim();
+        const content = contentInput.value.trim();
+
+        if (!name || !content) {
+          alert("请填写昵称和留言内容！");
+          return;
+        }
+
+        const now = new Date();
+        const time = now.getFullYear() + "-" + 
+                     String(now.getMonth() + 1).padStart(2, "0") + "-" + 
+                     String(now.getDate()).padStart(2, "0") + " " + 
+                     String(now.getHours()).padStart(2, "0") + ":" + 
+                     String(now.getMinutes()).padStart(2, "0");
+
+        const commentItem = document.createElement("div");
+        commentItem.className = "comment-item";
+        commentItem.innerHTML = `
+          <div class="comment-header">
+            <span class="comment-name">${escapeHtml(name)}</span>
+            <span class="comment-time">${time}</span>
+          </div>
+          <div class="comment-body">${escapeHtml(content)}</div>
+        `;
+
+        commentList.appendChild(commentItem);
+
+        nameInput.value = "";
+        contentInput.value = "";
+
+        commentList.scrollTop = commentList.scrollHeight;
+
+        saveComments();
+      }
+
+      // 保存评论到本地存储
+      function saveComments() {
+        const commentList = document.getElementById("comment-list");
+        const comments = [];
+        
+        commentList.querySelectorAll(".comment-item").forEach((item) => {
+          const name = item.querySelector(".comment-name").textContent;
+          const time = item.querySelector(".comment-time").textContent;
+          const content = item.querySelector(".comment-body").textContent;
+          comments.push({ name, time, content });
+        });
+
+        comments.sort((a, b) => new Date(a.time) - new Date(b.time));
+
+        localStorage.setItem("blogComments", JSON.stringify(comments));
+      }
+
+      // 从本地存储加载评论
+      function loadComments() {
+        const savedComments = localStorage.getItem("blogComments");
+        if (savedComments) {
+          const comments = JSON.parse(savedComments);
+          const commentList = document.getElementById("comment-list");
+          commentList.innerHTML = "";
+
+          comments.sort((a, b) => new Date(a.time) - new Date(b.time));
+
+          comments.forEach((comment) => {
+            const commentItem = document.createElement("div");
+            commentItem.className = "comment-item";
+            commentItem.innerHTML = `
+              <div class="comment-header">
+                <span class="comment-name">${escapeHtml(comment.name)}</span>
+                <span class="comment-time">${escapeHtml(comment.time)}</span>
+              </div>
+              <div class="comment-body">${escapeHtml(comment.content)}</div>
+            `;
+            commentList.appendChild(commentItem);
+          });
+        }
+      }
+
+      // HTML转义函数，防止XSS攻击
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // 回到顶部功能
+      function scrollToTop() {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      }
+
+      // 初始化点赞数和访问人数
+      function initStats() {
+        // 从本地存储获取统计数据
+        let stats = JSON.parse(localStorage.getItem("pageStats")) || {
+          likes: 0,
+          visits: 0
+        };
+        
+        // 访问人数加1
+        stats.visits++;
+        
+        // 保存到本地存储
+        localStorage.setItem("pageStats", JSON.stringify(stats));
+        
+        // 更新页面显示
+        document.getElementById("like-count").textContent = stats.likes;
+        document.getElementById("visit-count").textContent = stats.visits;
+        
+        // 为点赞按钮添加点击事件
+        document.querySelector(".stat-item:first-child").addEventListener("click", function() {
+          stats.likes++;
+          localStorage.setItem("pageStats", JSON.stringify(stats));
+          document.getElementById("like-count").textContent = stats.likes;
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <!-- 头部导航 -->
+    <header>
+      <!-- Logo -->
+      <div class="logo">
+        <img src="OIP-C.webp" alt="Logo" />
+      </div>
+      
+      <!-- 汉堡按钮 -->
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#">首页</a></li>
+          <li><a href="#">我的家乡</a></li>
+          <li><a href="#">兴趣爱好</a></li>
+          <li><a href="#">文章</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- 横幅图片 -->
+    <div class="banner">
+      <img src="背景.webp" alt="偶像活动Stars!插画" />
+    </div>
+
+    <!-- 主体内容 -->
+    <main>
+      <!-- 侧边个人信息 -->
+      <aside class="sidebar">
+        <div class="person-info">
+          <div class="avatar-container">
+            <img src="杨洁头像.jpeg" alt="杨洁头像" class="avatar" />
+            <div class="stats-container">
+              <div class="stat-item">
+                <span class="stat-icon">👍</span>
+                <span class="stat-value" id="like-count">0</span>
+                <span class="stat-label">点赞</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-icon">👁️</span>
+                <span class="stat-value" id="visit-count">0</span>
+                <span class="stat-label">访问</span>
+              </div>
+            </div>
+          </div>
+          <h3>杨洁</h3>
+          <p>专业：人工智能技术应用</p>
+          <p>学校：重庆安防职业学院</p>
+          <p>座右铭：人生苦短，再来一碗</p>
+          <p>爱好：画画，吃饭，看漫画</p>
+          <p>邮箱：2922519542@qq.com</p>
+        </div>
+        
+        <!-- 评论区 -->
+        <div class="comment-section">
+          <h3>留言板</h3>
+          <div class="comment-form">
+            <input type="text" id="comment-name" placeholder="你的昵称" />
+            <textarea id="comment-content" placeholder="写下你的留言..."></textarea>
+            <button onclick="addComment()">发表留言</button>
+          </div>
+          <div class="comment-list" id="comment-list">
+            <div class="comment-item">
+              <div class="comment-header">
+                <span class="comment-name">访客</span>
+                <span class="comment-time">2026-01-08</span>
+              </div>
+              <div class="comment-body">欢迎来到我的个人主页！</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 主内容区域 -->
+      <div class="content">
+        <!-- 首页内容 -->
+        <section id="首页" class="content-section">
+          <h2>个人介绍</h2>
+          <p class="intro-text">
+            你好呀！我是一名人工智能专业大一新生，正一头扎进网页制作的世界里，目前主攻HTML与CSS的学习与实践。<br /><br />
+            敲下一行行HTML标签搭建页面骨架，用CSS调试出喜欢的色彩和布局，看着杂乱的代码变成整洁又好看的网页，是我课余最有成就感的事。我还总爱把动漫里的元素搬进自己的小作品——比如用喜欢的番剧角色做网页背景，给按钮设计成二次元风格的样式，让代码也染上几分热爱的色彩。<br /><br />
+            作为一名资深动漫爱好者，热血番的拼搏精神、智斗番的逻辑巧思，不仅是我的快乐源泉，也悄悄给了我不少学习灵感。未来，我希望能把人工智能技术和网页制作、动漫创意结合起来，解锁更多有趣的玩法。<br /><br />
+            如果你也喜欢敲代码、聊动漫，欢迎来找我一起交流进步呀！
+          </p>
+        </section>
+
+        <!-- 我的家乡内容 -->
+        <section id="我的家乡" class="content-section">
+          <h2>我的家乡 - 重庆</h2>
+          <div class="content-card">
+            <h3>重庆简介</h3>
+            <p>
+              重庆，简称“渝”，别称山城、江城，是中华人民共和国直辖市、国家中心城市、超大城市，国务院批复确定的国家重要的中心城市之一、长江上游地区经济中心、国家重要先进制造业中心、西部金融中心、西部国际综合交通枢纽和国际门户枢纽。
+            </p>
+            <p>
+              重庆地处中国西南部，是长江上游地区的经济、金融、科创、航运和商贸物流中心，国家物流枢纽，西部大开发重要的战略支点、“一带一路”和长江经济带重要联结点及内陆开放高地、山清水秀美丽之地。
+            </p>
+          </div>
+          <div class="content-card">
+            <h3>重庆特色</h3>
+            <p>
+              <strong>美食：</strong
+              >重庆火锅、小面、酸辣粉、磁器口麻花、南山泉水鸡等美食闻名全国，其中重庆火锅更是被誉为“中国四大火锅”之一。
+            </p>
+            <p>
+              <strong>风景：</strong
+              >重庆拥有洪崖洞、解放碑、长江索道、武隆喀斯特旅游区、大足石刻等众多著名景点，自然风光与人文景观交相辉映。
+            </p>
+            <p>
+              <strong>文化：</strong
+              >重庆是巴渝文化的发祥地，拥有丰富的历史文化遗产和独特的民俗风情，如川剧、铜梁龙舞、秀山花灯等。
+            </p>
+          </div>
+          <div class="content-card">
+            <h3>重庆印象</h3>
+            <p>
+              重庆是一座充满活力和魅力的城市，它既有现代化的摩天大楼，也有古朴的巴渝民居；既有繁华的商业中心，也有宁静的山水风光。在这里，你可以感受到独特的山城魅力，品尝到地道的重庆美食，体验到热情好客的重庆人民。
+            </p>
+            <p>
+              作为土生土长的重庆人，我为自己的家乡感到骄傲和自豪。欢迎大家来重庆做客，感受这座城市的独特魅力！
+            </p>
+          </div>
+        </section>
+
+        <!-- 兴趣爱好内容 -->
+        <section id="兴趣爱好" class="content-section">
+          <h2>兴趣爱好</h2>
+          <div class="content-card">
+            <h3>网页制作</h3>
+            <p>
+              我热爱网页制作，目前正在学习HTML和CSS，喜欢通过代码构建美观实用的网页。
+            </p>
+          </div>
+          <div class="content-card">
+            <h3>动漫</h3>
+            <p>
+              作为资深动漫爱好者，我喜欢各种类型的动漫，尤其是热血番和智斗番，它们给了我很多学习灵感。
+            </p>
+          </div>
+          <div class="content-card">
+            <h3>编程</h3>
+            <p>
+              我擅长Python语言，喜欢通过编程解决实际问题，也喜欢探索人工智能领域的各种技术。
+            </p>
+          </div>
+        </section>
+
+        <!-- 文章内容 -->
+        <section id="文章" class="content-section">
+          <h2>我的文章</h2>
+          <div class="content-card">
+            <h3>1. 技术干货类：从0到1，我用HTML+CSS写了第一个响应式网页</h3>
+            <p>
+              作为一名人工智能专业的大一学生，最近我一头扎进了网页制作的世界。从对着 <div> 标签一脸茫然，到敲出第一行能让页面自适应手机屏幕的代码，这个过程踩了不少坑，也攒了很多实用的小技巧。
+            </p>
+            <p>
+              最开始跟着教程写静态页面时，总觉得“这不就是搭积木吗？”，直到尝试做响应式布局，才发现自己连 flex 布局的主轴和侧轴都没分清。后来靠着拆解别人的优秀网页源码、反复调试 media query 参数，终于做出了第一个能在手机和电脑上都正常显示的个人主页雏形。
+            </p>
+            <p>
+              分享几个新手避坑指南：① 先画好页面骨架再填样式，别上来就堆CSS属性；② 善用浏览器开发者工具调试，按F12能省一半时间；③ 多逛GitHub找开源模板参考，但一定要自己敲一遍代码，别直接复制粘贴。
+            </p>
+            <p>
+              网页制作和AI算法看似不相关，但那种从0到1构建作品的成就感，真的一模一样。
+            </p>
+          </div>
+          <div class="content-card">
+            <h3>2. 学习成长类：大一AI萌新的第一个学期，我悟到了这3件事</h3>
+            <p>
+              开学前，我以为人工智能专业的日常就是对着屏幕敲代码、调模型，开学后才发现，现实和想象差了十万八千里。
+            </p>
+            <p>
+              第一个月，被高数和线性代数按在地上摩擦，才知道“没有数学基础，学AI就是空中楼阁”这句话不是唬人的；后来接触Python，从写Hello World到用Pandas处理数据集，又体会到“实践才是最好的老师”——跟着教程敲十遍，不如自己独立写一个小项目。
+            </p>
+            <p>
+              这学期最大的收获，除了课本上的知识，还有两件事：一是加入了学校的AI兴趣小组，和学长学姐一起做小项目，比自己单打独斗高效太多；二是养成了记笔记的习惯，把每天遇到的问题和解决方法整理成文档，期末复习时简直是宝藏。
+            </p>
+            <p>
+              写给和我一样的大一萌新：别怕犯错，别怕问“傻问题”，大学就是用来试错和成长的。
+            </p>
+          </div>
+          <div class="content-card">
+            <h3>3. 项目复盘类：我用Python做了一个简单的图像识别小工具</h3>
+            <p>
+              作为AI专业学生，第一次接触图像识别时，我总觉得这是“大佬才敢碰的领域”，直到跟着教程一步步实现，才发现入门其实没那么难。
+            </p>
+            <p>
+              这次的小项目目标很简单：用OpenCV库做一个能识别图片中人脸的工具。过程中遇到的最大难题，是环境配置——光是装OpenCV和相关依赖，就折腾了我大半天，最后才发现是Python版本和库的版本不兼容。解决了环境问题后，代码部分反而顺利很多：调用预训练的人脸检测器、读取图片、标记人脸区域，几行核心代码就能实现基础功能。
+            </p>
+            <p>
+              虽然这个工具很简陋，和真正的AI模型比起来不值一提，但当我看到程序成功框出图片里的人脸时，那种兴奋感真的难以言表。这次项目也让我明白：再复杂的AI技术，拆解开来都是由一个个基础知识点组成的，打好基础真的很重要。
+            </p>
+          </div>
+          <div class="content-card">
+            <h3>4. 工具分享类：5个神仙工具，帮我高效搞定大学学习和创作</h3>
+            <p>
+              作为既要学AI专业课，又要捣鼓网页制作的大一学生，我真的离不开各种高效工具。今天就分享5个我私藏的宝藏工具，帮你省下时间去做更重要的事。
+            </p>
+            <p>
+              1. Notion：一站式搞定笔记、任务管理和项目复盘，我用它来整理AI知识点和网页制作的代码片段，还能设置学习计划，简直是大学生的生产力神器。
+            </p>
+            <p>
+              2. Canva：设计小白也能轻松做出好看的博客配图和海报，里面有超多免费模板，我做博客封面图全靠它。
+            </p>
+            <p>
+              3. GitHub Copilot：写代码的好帮手，能根据注释自动生成代码片段，帮我解决了很多网页制作中的语法难题，新手友好度拉满。
+            </p>
+            <p>
+              4. Anki：背单词和记知识点的神器，利用间隔重复原理，帮我高效记住高数公式和Python语法，比死记硬背管用多了。
+            </p>
+            <p>
+              5. VS Code：不用多说，程序员的标配编辑器，装上各种插件后，不管是写Python还是HTML，都能事半功倍。
+            </p>
+            <p>
+              工具只是辅助，合理利用才能让学习和创作效率翻倍哦。
+            </p>
+          </div>
+          <div class="content-card">
+            <h3>5. 观点感悟类：为什么我觉得AI专业学生，也要学点网页制作？</h3>
+            <p>
+              很多人问我：“你一个学人工智能的，为啥要浪费时间学网页制作？”其实最开始我只是觉得好玩，后来慢慢发现，这两门技能其实是相辅相成的。
+            </p>
+            <p>
+              首先，网页制作能帮我更好地展示AI项目成果。比如我做了一个图像识别模型，光有代码和数据报告不够直观，如果能做一个简单的网页，让用户上传图片就能看到识别结果，展示效果会好太多。
+            </p>
+            <p>
+              其次，学习网页制作的过程，也是在锻炼逻辑思维能力。写HTML需要梳理页面结构，写CSS需要考虑样式的层级关系，这和写AI算法时梳理逻辑、搭建模型的思路是相通的。
+            </p>
+            <p>
+              最后，多掌握一门技能，就多了一种可能性。谁知道未来会不会需要既懂AI又懂前端的人才呢？大学期间多学点东西，总没有错。
+            </p>
+            <p>
+              对AI专业的同学来说，跨界学习不是浪费时间，而是在给自己的未来铺路。
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- 回到顶部按钮 -->
+    <button id="back-to-top" onclick="scrollToTop()">
+      ↑
+    </button>
+  </body>
+</html>
